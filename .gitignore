@@ -1,0 +1,22 @@
+# --- SECRETS — never commit these -------------------------------------------
+.env
+api-keys.txt
+
+# Local backup / scratch copies (contain working keys — keep off GitHub)
+Dev/
+dev/
+
+# Claude Code session data
+.claude/
+
+# Internal strategy notes (remove this line if you want the plan public)
+PLAN.md
+
+# --- Build output ------------------------------------------------------------
+node_modules/
+out/
+*.vsix
+
+# --- OS noise ----------------------------------------------------------------
+.DS_Store
+Thumbs.db

@@ -1,0 +1,24 @@
+# --- SECRETS — must never ship inside the .vsix ------------------------------
+api-keys.txt
+.env
+Dev/**
+dev/**
+.claude/**
+
+# --- Sources & dev-only files (the package ships compiled out/ only) ---------
+.vscode/**
+src/**
+test/**
+**/*.ts
+**/*.map
+tsconfig.json
+.gitignore
+*.vsix
+node_modules/**
+
+# --- Docs not needed inside the package (README/LICENSE/CHANGELOG do ship) ---
+CHECKLIST.md
+PLAN.md
+PUBLISHING.md
+CONTRIBUTING.md
+.github/**

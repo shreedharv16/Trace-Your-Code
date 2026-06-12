@@ -1,0 +1,284 @@
+{
+  "name": "trace-your-code",
+  "displayName": "Trace Your Code — AI Coding Time Machine",
+  "description": "Every prompt becomes a chapter. See what Claude Code / Copilot actually changed (real diffs, never chat claims), scrub any file back through time, undo any turn, and ask \"what broke since it last worked?\". Local-only; works with no API key.",
+  "version": "0.3.0",
+  "publisher": "shreedharvellayaraj",
+  "license": "MIT",
+  "icon": "media/icon-128.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/REPLACE-WITH-YOUR-USERNAME/REPLACE-WITH-YOUR-REPO.git"
+  },
+  "bugs": {
+    "url": "https://github.com/REPLACE-WITH-YOUR-USERNAME/REPLACE-WITH-YOUR-REPO/issues"
+  },
+  "homepage": "https://github.com/REPLACE-WITH-YOUR-USERNAME/REPLACE-WITH-YOUR-REPO#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "AI",
+    "Other"
+  ],
+  "keywords": [
+    "claude code",
+    "copilot",
+    "cursor",
+    "ai code review",
+    "undo ai changes",
+    "time machine",
+    "checkpoint",
+    "diff",
+    "vibe coding",
+    "ai accountability"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "changeTracker",
+          "title": "Trace Your Code",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "changeTracker": [
+        {
+          "id": "changeTrackerView",
+          "name": "Changes Since Checkpoint",
+          "type": "webview",
+          "icon": "media/icon.svg"
+        },
+        {
+          "id": "changeTrackerTimeline",
+          "name": "Activity Timeline",
+          "type": "webview",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "changeTracker.takeCheckpoint",
+        "title": "Take Checkpoint (Snapshot Current Files)",
+        "category": "Trace Your Code",
+        "icon": "$(save)"
+      },
+      {
+        "command": "changeTracker.refresh",
+        "title": "Refresh Changes",
+        "category": "Trace Your Code",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "changeTracker.acceptAll",
+        "title": "Accept All Changes",
+        "category": "Trace Your Code",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "changeTracker.rejectAll",
+        "title": "Reject All Changes (Revert to Checkpoint)",
+        "category": "Trace Your Code",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "changeTracker.acceptFile",
+        "title": "Accept This File",
+        "category": "Trace Your Code",
+        "icon": "$(check)"
+      },
+      {
+        "command": "changeTracker.rejectFile",
+        "title": "Reject This File (Revert to Checkpoint)",
+        "category": "Trace Your Code",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "changeTracker.openDiff",
+        "title": "Open Diff vs Checkpoint",
+        "category": "Trace Your Code",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "changeTracker.clearCheckpoint",
+        "title": "Clear Checkpoint",
+        "category": "Trace Your Code",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "changeTracker.refreshTrace",
+        "title": "Refresh Activity Timeline",
+        "category": "Trace Your Code",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "changeTracker.summarizeTrace",
+        "title": "Summarize Activity (LLM)",
+        "category": "Trace Your Code",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "changeTracker.setTraceApiKey",
+        "title": "Set Trace API Key",
+        "category": "Trace Your Code",
+        "icon": "$(key)"
+      },
+      {
+        "command": "changeTracker.openDashboard",
+        "title": "Open Project Story (Dashboard)",
+        "category": "Trace Your Code",
+        "icon": "$(graph)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "changeTracker.acceptFile",
+          "when": "false"
+        },
+        {
+          "command": "changeTracker.rejectFile",
+          "when": "false"
+        },
+        {
+          "command": "changeTracker.openDiff",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "changeTracker.takeCheckpoint",
+          "when": "view == changeTrackerView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "changeTracker.refresh",
+          "when": "view == changeTrackerView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "changeTracker.acceptAll",
+          "when": "view == changeTrackerView && changeTracker.hasCheckpoint",
+          "group": "1_bulk@1"
+        },
+        {
+          "command": "changeTracker.rejectAll",
+          "when": "view == changeTrackerView && changeTracker.hasCheckpoint",
+          "group": "1_bulk@2"
+        },
+        {
+          "command": "changeTracker.clearCheckpoint",
+          "when": "view == changeTrackerView && changeTracker.hasCheckpoint",
+          "group": "2_danger@1"
+        },
+        {
+          "command": "changeTracker.refreshTrace",
+          "when": "view == changeTrackerTimeline",
+          "group": "navigation@1"
+        },
+        {
+          "command": "changeTracker.openDashboard",
+          "when": "view == changeTrackerTimeline",
+          "group": "navigation@2"
+        },
+        {
+          "command": "changeTracker.setTraceApiKey",
+          "when": "view == changeTrackerTimeline",
+          "group": "1_config@1"
+        },
+        {
+          "command": "changeTracker.summarizeTrace",
+          "when": "view == changeTrackerTimeline",
+          "group": "1_config@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Trace Your Code",
+      "properties": {
+        "changeTracker.include": {
+          "type": "string",
+          "default": "**/*",
+          "description": "Glob of files to track when taking a checkpoint."
+        },
+        "changeTracker.exclude": {
+          "type": "string",
+          "default": "{**/node_modules/**,**/.git/**,**/dist/**,**/out/**,**/build/**,**/.next/**,**/coverage/**,**/*.lock,**/.DS_Store}",
+          "description": "Glob of files to ignore. VS Code's files.exclude / search.exclude are also respected."
+        },
+        "changeTracker.maxFileSizeKB": {
+          "type": "number",
+          "default": 1024,
+          "description": "Files larger than this (in KB) are skipped. Keeps snapshots and diffing fast."
+        },
+        "changeTracker.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh the changes list when files change on disk."
+        },
+        "changeTracker.trace.summarize": {
+          "type": "boolean",
+          "default": false,
+          "description": "Master toggle for AI narration (Explain this change, file stories, ranked breakage suspects). OFF by default — having an API key on disk is never enough by itself; you must opt in here or via the toggle in the timeline panel / dashboard. Everything else (tracking, diffs, time travel) works without it."
+        },
+        "changeTracker.trace.provider": {
+          "type": "string",
+          "enum": [
+            "",
+            "openai",
+            "anthropic",
+            "gemini",
+            "openrouter",
+            "azure-openai",
+            "custom"
+          ],
+          "default": "",
+          "description": "LLM provider for AI narration. Empty = use CHANGE_TRACKER_PROVIDER from api-keys.txt (recommended). 'custom' accepts any OpenAI-compatible chat-completions endpoint (Groq, Together, Mistral, DeepSeek, Ollama, …)."
+        },
+        "changeTracker.trace.endpoint": {
+          "type": "string",
+          "default": "",
+          "description": "Endpoint URL — only needed for 'azure-openai' (your resource's responses/chat URL incl. api-version) or 'custom' (an OpenAI-compatible /chat/completions URL). Hosted providers (OpenAI/Anthropic/Gemini/OpenRouter) ignore this."
+        },
+        "changeTracker.trace.model": {
+          "type": "string",
+          "default": "",
+          "description": "Model name (or Azure deployment name). Empty = the provider's default (gpt-4o-mini, claude-haiku, gemini-flash, …)."
+        },
+        "changeTracker.trace.sendDiffsToLLM": {
+          "type": "boolean",
+          "default": false,
+          "description": "When bulk-summarizing, also send truncated diff contents to the LLM. Off by default — only metadata (prompt, file names, tool kinds) is sent. Explicit per-turn actions (Explain / Story / Investigate) always use the real diff, since you invoke them deliberately."
+        },
+        "changeTracker.shadow.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Record a shadow-git snapshot per AI turn (the time machine). The shadow repo lives in the extension's storage folder — your project folder and its real .git are never touched. Requires git on PATH."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node --test",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.4.0"
+  }
+}
